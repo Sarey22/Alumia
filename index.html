@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Alumia">
 <title>Alumia</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
 
@@ -328,7 +328,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);max-wi
 /* toast */
 .toast{position:fixed;bottom:94px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--ink);color:white;padding:10px 18px;border-radius:20px;font-size:12px;opacity:0;transition:all 0.25s;z-index:700;pointer-events:none;white-space:nowrap;}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
-#authWrap{position:fixed;inset:0;background:#FFFFFF;z-index:1000;display:flex;flex-direction:column;max-width:390px;margin:0 auto;}
+#authWrap{position:fixed;inset:0;background:#FFFFFF;z-index:1000;display:flex;flex-direction:column;max-width:430px;width:100%;left:50%;transform:translateX(-50%);}
 #authWrap.hidden{display:none;}
 .auth-screen{display:none;flex:1;flex-direction:column;padding:0;overflow-y:auto;}
 .auth-screen.active{display:flex;}
@@ -384,9 +384,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);max-wi
         <div class="feature-item"><div class="feature-icon">🌤️</div>Weather-matched daily outfit picks</div>
         <div class="feature-item"><div class="feature-icon">🛍️</div>Shopping duplicate detector</div>
       </div>
-      <button class="auth-btn camel" onclick="showAuth('signup')" style="margin-bottom:10px">Get Started — It's Free</button>
-      <button class="auth-btn secondary" onclick="showAuth('login')" style="margin-bottom:10px">I already have an account</button>
-      <button class="auth-btn" style="background:transparent;color:var(--ink3);border:none;font-size:12px;padding:10px;margin-top:0" onclick="enterDemoMode()">👀 Just exploring? Try the demo →</button>
+      <button class="auth-btn camel" id="btn-getstarted" style="margin-bottom:10px">Get Started — It's Free</button>
+      <button class="auth-btn secondary" id="btn-haveaccount" style="margin-bottom:10px">I already have an account</button>
+      <button class="auth-btn" id="btn-demo" style="background:transparent;color:var(--ink3);border:none;font-size:12px;padding:10px;margin-top:0">👀 Just exploring? Try the demo →</button>
     </div>
   </div>
 
@@ -1237,10 +1237,12 @@ SUMMARY: [2–3 warm sentences explaining why this season suits them]`}
   }
 }
 
-// ════ SUPABASE (optional — only activates when keys are added) ════
-// To connect real accounts: replace these with your values from supabase.com
-const SUPABASE_URL     = 'https://estjwieuwsqvayhckugw.supabase.co';   
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdGp3aWV1d3NxdmF5aGNrdWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTkzNTYsImV4cCI6MjA5NzY5NTM1Nn0.gd12aM8nHTwIH1PpPE8rNJ2bZnsMC3Y5yb0NmxXedKI';  // 
+// ████████████████████████████████████████████████
+// ✏️  STEP 1 — PASTE YOUR SUPABASE DETAILS HERE
+// ████████████████████████████████████████████████
+const SUPABASE_URL      = 'https://estjwieuwsqvayhckugw.supabase.co';  // paste your Project URL here
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdGp3aWV1d3NxdmF5aGNrdWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTkzNTYsImV4cCI6MjA5NzY5NTM1Nn0.gd12aM8nHTwIH1PpPE8rNJ2bZnsMC3Y5yb0NmxXedKI';  // paste your anon/public key here
+// ████████████████████████████████████████████████
 
 let supabase = null;
 let currentUser = null;
@@ -1654,6 +1656,14 @@ function init() {
   buildWeekRow();
   buildW();
   buildDupeThumbs();
+
+  // Wire splash buttons via event listeners (more reliable than inline onclick)
+  const gs = document.getElementById('btn-getstarted');
+  const ha = document.getElementById('btn-haveaccount');
+  const dm = document.getElementById('btn-demo');
+  if (gs) gs.addEventListener('click', () => showAuth('signup'));
+  if (ha) ha.addEventListener('click', () => showAuth('login'));
+  if (dm) dm.addEventListener('click', () => enterDemoMode());
 }
 init();
 </script>
